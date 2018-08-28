@@ -1,0 +1,11 @@
+LOCAL_CONFIG=$(HOME)/.config/docker_ports/
+NANE := $(USER)
+DOCKERHUB_NAME= # your dockerhub username
+
+GPU=''
+DOCKER_MOUNTS=
+PREFIX=$(HOME)
+JUPYTER_DIR=$(PREFIX)
+MODEL_DIR='$(PREFIX)/models/'
+TENSORBOARD_DIR='$(PREFIX)/runs/'
+MONGO_DIR='$(PREFIX)/mongodb_experiments/'

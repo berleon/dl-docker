@@ -1,4 +1,4 @@
-FROM nvidia/cuda:9.2-cudnn7-devel-ubuntu16.04
+FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
 MAINTAINER Leon Sixt (docker@leon-sixt.de)
 
 RUN apt-get update && apt-get install -y --assume-yes --install-recommends \
@@ -61,7 +61,7 @@ RUN conda create -n py36  \
         python=3.6 \
         anaconda \
         pytorch \
-        cuda92 \
+        cuda90 \
         numpy \
         torchvision \
         jupyter \

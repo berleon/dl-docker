@@ -33,7 +33,7 @@ run_pytorch:
 	mkdir -p $(PORTS_CONFIG)
 	# --ipc=host fix data loader
 		#--detach
-	GPU=$(GPU) ./docker-run-wrapper \
+	GPU=$(GPU) ./docker-run-wrapper.py \
 		--name $(NAME)_pytorch  \
 		--privileged \
 		--cap-add=ALL \
@@ -52,7 +52,7 @@ run_pytorch:
 
 run_tensorboard:
 	mkdir -p $(PORTS_CONFIG)
-	GPU='' ./docker-run-wrapper \
+	GPU='' ./docker-run-wrapper.py \
 		--name $(NAME)_tensorboard \
 		-it \
 		-e TENSORBOARD_DIR=$(TENSORBOARD_DIR) \
@@ -68,7 +68,7 @@ run_tensorboard:
 
 run_mongodb:
 	mkdir -p $(PORTS_CONFIG)
-	GPU='' ./docker-run-wrapper \
+	GPU='' ./docker-run-wrapper.py \
 		--jupyterport 686 \
 		--name $(NAME)_mongodb \
 		-it \

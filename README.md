@@ -3,13 +3,13 @@
 
 ## Setup
 
-Copy `config.mk.template` to `config.mk`
+1. Copy `config.mk.template` to `config.mk`
 
 ```bash
 $ cp config.mk.template config.mk
 ```
 
-Edit the config to set the appropriate paths.
+2. Edit the `config.mk` file to set the appropriate paths.
 
 ## Build & Start
 
@@ -31,6 +31,8 @@ $ forward_docker_ports.sh <your_hostname>
 
 You can then reach the services at:
 
+| Service | Address |
+|---------|---------|
 | Jupyter Notebook  | [localhost:8000](http://localhost:8000/) |
 | Tensorboard       | [localhost:6006](http://localhost:6006/) |
 | Sacred Board      | [localhost:5000](http://localhost:5000/) |

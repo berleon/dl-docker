@@ -1,4 +1,4 @@
-FROM nvidia/cuda:9.1-cudnn7-devel-ubuntu16.04
+FROM nvidia/cuda:9.2-cudnn7-devel-ubuntu16.04
 MAINTAINER Leon Sixt (docker@leon-sixt.de)
 
 RUN apt-get update && apt-get install -y --assume-yes --install-recommends \
@@ -47,7 +47,7 @@ RUN apt-get update && apt-get install -y --assume-yes --install-recommends \
 # Enable passwordless sudo for all users
 RUN echo '%sudo ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-ENV PATH /opt/conda/envs/default/bin:/opt/conda/bin:$PATH
+ENV PATH /opt/conda/bin:$PATH
 
 RUN wget --quiet https://repo.continuum.io/miniconda/Miniconda2-4.4.10-Linux-x86_64.sh -O ~/miniconda.sh && \
         /bin/bash ~/miniconda.sh -b -p /opt/conda && \
@@ -55,11 +55,13 @@ RUN wget --quiet https://repo.continuum.io/miniconda/Miniconda2-4.4.10-Linux-x86
         ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
 
 RUN conda install -n base conda
-RUN conda create -n default python=3.7
-RUN conda install -n default \
+RUN conda create -n py36  \
             -c pytorch \
             -c conda-forge \
+        python=3.6 \
+        anaconda \
         pytorch \
+        cuda92 \
         numpy \
         torchvision \
         jupyter \
@@ -72,7 +74,6 @@ RUN conda install -n default \
         tqdm \
         scikit-learn \
         scikit-image \
-        mxnet \
         h5py \
         hdf5 \
         sympy \
@@ -84,7 +85,10 @@ RUN conda install -n default \
         keras \
         && true
 
-ENV PATH /opt/conda/envs/default/bin:$PATH
+RUN conda list -n py36 | grep python
+
+ENV PATH /opt/conda/envs/py36/bin:$PATH
+
 RUN which pip
 RUN pip install \
         more_itertools \
@@ -102,7 +106,7 @@ RUN pip install jupyter_contrib_nbextensions \
  && jupyter nbextension enable varInspector/main \
  && jupyter nbextension enable comment-uncomment/main
 
-RUN echo "source /opt/conda/bin/activate/default" >> /etc/profile
+RUN echo "source /opt/conda/bin/activate/py36" >> /etc/profile
 
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod a+x /usr/local/bin/entrypoint.sh

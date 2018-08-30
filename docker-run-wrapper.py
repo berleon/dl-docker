@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# adapted from https://github.com/bethgelab/docker-deeplearning/blob/master/agmb-docker
+
 import os
 import socket
 import argparse

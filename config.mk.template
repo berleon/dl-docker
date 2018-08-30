@@ -1,6 +1,5 @@
 LOCAL_CONFIG=$(HOME)/.config/docker_ports/
 NANE := $(USER)
-DOCKERHUB_NAME= # your dockerhub username
 
 GPU=''
 DOCKER_MOUNTS=

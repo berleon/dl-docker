@@ -1,4 +1,3 @@
-
 include config.mk
 
 .PHONY: print_config print_ports
@@ -34,7 +33,7 @@ run_pytorch:
 	mkdir -p $(PORTS_CONFIG)
 	# --ipc=host fix data loader
 		#--detach
-	GPU=$(GPU) ./agtl-docker \
+	GPU=$(GPU) ./docker-run-wrapper \
 		--name $(NAME)_pytorch  \
 		--privileged \
 		--cap-add=ALL \
@@ -43,6 +42,7 @@ run_pytorch:
 		-e JUPYTER_DIR=$(JUPYTER_DIR) \
 		-e MODEL_DIR=$(MODEL_DIR) \
 		-e TENSORBOARD_DIR=$(TENSORBOARD_DIR) \
+		-e DATA_DIR=$(DATA_DIR) \
 		$(DOCKER_MOUNTS)  \
 		$(NAME)/pytorch
 	docker port $(NAME)_pytorch | \
@@ -52,7 +52,7 @@ run_pytorch:
 
 run_tensorboard:
 	mkdir -p $(PORTS_CONFIG)
-	GPU='' ./agtl-docker \
+	GPU='' ./docker-run-wrapper \
 		--name $(NAME)_tensorboard \
 		-it \
 		-e TENSORBOARD_DIR=$(TENSORBOARD_DIR) \
@@ -68,7 +68,7 @@ run_tensorboard:
 
 run_mongodb:
 	mkdir -p $(PORTS_CONFIG)
-	GPU='' ./agtl-docker \
+	GPU='' ./docker-run-wrapper \
 		--jupyterport 686 \
 		--name $(NAME)_mongodb \
 		-it \

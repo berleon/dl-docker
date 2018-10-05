@@ -7,7 +7,7 @@ This deep learning docker setup includes the [sacred library](https://sacred.rea
 Create your own config.mk file with
 
 ```
-$ make config > config.mk
+$ ./generate-config.sh > config.mk
 ```
 
 This defines the paths of jupyter, pytorch, and mongodb, which volumes to mount and which gpus to use.

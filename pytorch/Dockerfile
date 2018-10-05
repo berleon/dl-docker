@@ -66,7 +66,6 @@ RUN conda create -n py36  \
         torchvision \
         jupyter \
         jupyterlab \
-        pytest \
         click \
         pandas \
         matplotlib \
@@ -77,12 +76,15 @@ RUN conda create -n py36  \
         h5py \
         hdf5 \
         sympy \
-        pytest \
         pymongo \
         pip \
         theano \
         tensorflow \
         keras \
+        flake8 \
+        pytest \
+        pytest-arraydiff \
+        pytest-flake8 \
         && true
 
 RUN conda list -n py36 | grep python
@@ -132,6 +134,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
+RUN ln -s /opt/conda/bin/activate /usr/bin/activate
 # Use the same gid and uid as your user on the host system. You can find them
 # out with the `id`  programm. This way the file ownership in mapped directories is
 # consistent with the host system.

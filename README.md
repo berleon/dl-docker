@@ -12,12 +12,17 @@ $ make config > config.mk
 
 This defines the paths of jupyter, pytorch, and mongodb, which volumes to mount and which gpus to use.
 
-## Build & Start
+## Commands
 
-```
-$ make build_all
-$ make run_all
-```
+`$ make build_all`: Builds all three images.
+
+`$ make run_all`: Runs each images.
+
+`$ make rm_images`: Removes the images.
+
+`$ make rm_all_containers`: Removes all containers (using force).
+
+`$ make zsh`: Creates an zsh session in the pytorch container.
 
 ## Forward Ports to Jupyter Notebook / Tensorboard / Sacredboard
 

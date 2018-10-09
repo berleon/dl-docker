@@ -69,7 +69,6 @@ run_tensorboard:
 run_mongodb:
 	mkdir -p $(PORTS_CONFIG)
 	GPU='' ./docker-run-wrapper.py \
-		--jupyterport 686 \
 		--name $(NAME)_mongodb \
 		-it \
 		--detach \

@@ -9,5 +9,5 @@ MODEL_DIR='${HOME}/models/'
 TENSORBOARD_DIR='${HOME}/runs/'
 MONGO_DIR='${HOME}/mongodb_experiments/'
 DATA_DIR='${HOME}/data/'
-DOCKER_MOUNTS= -v ${HOME}:${HOME} -v /mnt/ssd:/mnt/ssd
+DOCKER_MOUNTS= -v ${HOME}:${HOME} -v /mnt/ssd:/mnt/ssd -v /home/data:/home/data
 EOF

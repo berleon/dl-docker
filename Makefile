@@ -102,6 +102,9 @@ rm_all_containers:
 zsh:
 	docker exec -it --user $(USER) $(NAME)_pytorch sh -c zsh
 
+zsh_root:
+	docker exec -it $(NAME)_pytorch sh -c zsh
+
 test:
 	echo hello
 save:

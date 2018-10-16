@@ -22,7 +22,18 @@ This defines the paths of jupyter, pytorch, and mongodb, which volumes to mount 
 
 `$ make rm_all_containers`: Removes all containers (using force).
 
-`$ make zsh`: Creates an zsh session in the pytorch container.
+`$ make zsh`: Creates an zsh session in the pytorch container. You can add the following snippet to your `.zshrc` or `.bashrc` to autoload the conda enviroment:
+
+```bash
+if [ -e /opt/conda/envs/dl-docker-py36 ] && [ $DOCKER_DL ]; then
+    source /opt/conda/bin/activate py36
+fi
+```
+
+Otherwise you can run each time inside of the container:
+```bash
+$ source /opt/conda/bin/activate py36
+```
 
 ## Forward Ports to Jupyter Notebook / Tensorboard / Sacredboard
 

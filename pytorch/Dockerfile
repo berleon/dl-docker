@@ -134,6 +134,8 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
+ENV DOCKER_DL True
+
 RUN ln -s /opt/conda/bin/activate /usr/bin/activate
 # Use the same gid and uid as your user on the host system. You can find them
 # out with the `id`  programm. This way the file ownership in mapped directories is

@@ -29,16 +29,27 @@ rm_images:
 	docker rmi $(NAME)/mongodb
 	docker rmi $(NAME)/tensorboard
 
+XSOCK=/tmp/.X11-unix
+XAUTH=$(shell realpath .docker.xauth)
+
+X11=--volume=$(XSOCK):$(XSOCK):rw \
+	--volume=$(XAUTH):$(XAUTH):rw \
+	--env="XAUTHORITY=$(XAUTH)" \
+	--env="DISPLAY"
+
 run_pytorch:
 	mkdir -p $(PORTS_CONFIG)
 	# --ipc=host fix data loader
 		#--detach
+	touch $(XAUTH)
+	xauth nlist $(DISPLAY) | sed -e 's/^..../ffff/' | xauth -f $(XAUTH) nmerge -
 	GPU=$(GPU) ./docker-run-wrapper.py \
 		--name $(NAME)_pytorch  \
 		--privileged \
 		--cap-add=ALL \
 		--ipc=host \
 		--detach \
+		$(X11) \
 		-e JUPYTER_DIR=$(JUPYTER_DIR) \
 		-e MODEL_DIR=$(MODEL_DIR) \
 		-e TENSORBOARD_DIR=$(TENSORBOARD_DIR) \

@@ -69,6 +69,7 @@ RUN conda create -n py36  \
         click \
         pandas \
         matplotlib \
+        seaborn \
         scipy \
         tqdm \
         scikit-learn \
@@ -135,6 +136,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 ENV DOCKER_DL True
+ENV TERM xterm-256color
 
 RUN ln -s /opt/conda/bin/activate /usr/bin/activate
 # Use the same gid and uid as your user on the host system. You can find them
@@ -155,3 +157,8 @@ RUN set -x \
  && gosu nobody true
 
 CMD ["/usr/local/bin/run_jupyterlab.sh"]
+
+RUN apt-get update && apt-get install -y --assume-yes --install-recommends \
+        xclip \
+        && \
+    rm -rf /var/lib/apt/lists

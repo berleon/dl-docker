@@ -11,6 +11,17 @@ $ ./generate-config.sh > config.mk
 ```
 
 This defines the paths of jupyter, pytorch, and mongodb, which volumes to mount and which gpus to use.
+If you have to install some local pip packages you can create
+a script `$HOME/install_local_pip.sh` that will be executed
+everytime you start a new `pytorch` container. The content would then look like this:
+
+```
+#! /usr/bin/env bash
+
+cd "$(dirname "$0")"
+pip install -e ./my_local_project
+```
+
 
 ## Commands
 

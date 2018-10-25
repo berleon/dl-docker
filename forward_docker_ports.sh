@@ -13,15 +13,19 @@ JUPYTER_PORT=$(ssh $HOST "cat $LOCAL_CONFIG/jupyter_port")
 # TENSORBOARD_HOST=$(ssh $HOST "cat $LOCAL_CONFIG/tensorboard_host")
 TENSORBOARD_PORT=$(ssh $HOST "cat $LOCAL_CONFIG/tensorboard_port")
 
+SSH_PORT=$(ssh $HOST "cat $LOCAL_CONFIG/ssh_port")
+
 echo "MONGODB: $MONGO_HOST:$MONGO_PORT"
 echo "JUPYTER: $JUPYTER_HOST:$JUPYTER_PORT"
 echo "TENSORBOARD: $TENSORBOARD_HOST:$TENSORBOARD_PORT"
+echo "SSH: $SSH_HOST:$SSH_PORT"
 
 CMD="ssh \
 	-L 27017:localhost:$MONGO_PORT \
 	-L 5000:localhost:$SACRED_BOARD_PORT \
 	-L 8000:localhost:$JUPYTER_PORT \
 	-L 6006:localhost:$TENSORBOARD_PORT \
+	-L 8022:localhost:$SSH_PORT \
 	$HOST -t zsh
 	"
 

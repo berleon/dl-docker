@@ -45,13 +45,17 @@ run_pytorch:
 		-e DATA_DIR=$(DATA_DIR) \
 		$(DOCKER_MOUNTS)  \
 		$(NAME)/pytorch
+	sleep 1
 	if [ -e $(HOME)/install_local_pip.sh ]; then \
 		docker exec -it $(NAME)_pytorch $(HOME)/install_local_pip.sh; \
 	fi;
 	docker port $(NAME)_pytorch | \
 		perl -n -e'/8888.*:([0-9]+)/ && print $$1' \
 		> $(PORTS_CONFIG)/jupyter_port
-	echo `hostname` > $(PORTS_CONFIG)/jupyter_host
+	docker port $(NAME)_pytorch | \
+		perl -n -e'/22.*:([0-9]+)/ && print $$1' \
+		> $(PORTS_CONFIG)/ssh_port
+	echo `hostname` > $(PORTS_CONFIG)/ssh_host
 
 run_tensorboard:
 	mkdir -p $(PORTS_CONFIG)
@@ -63,6 +67,7 @@ run_tensorboard:
 		$(DOCKER_MOUNTS)  \
 		--detach \
 		$(NAME)/tensorboard
+	sleep 1
 	echo `hostname` > $(PORTS_CONFIG)/tensorboard_host
 	docker port $(NAME)_tensorboard | \
 		perl -n -e'/6006.*:([0-9]+)/ && print $$1' \
@@ -80,6 +85,7 @@ run_mongodb:
 		$(DOCKER_MOUNTS)  \
 		--memory=4g \
 		$(NAME)/mongodb
+	sleep 1
 	echo `hostname` > $(PORTS_CONFIG)/mongodb_host
 	docker port $(NAME)_mongodb | \
 		perl -n -e'/27017.*:([0-9]+)/ && print $$1' \

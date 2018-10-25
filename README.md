@@ -64,4 +64,4 @@ You can then reach the services at:
 | Tensorboard       | [localhost:6006](http://localhost:6006/) |
 | Sacred Board      | [localhost:5000](http://localhost:5000/) |
 | Mongo DB Connection | localhost:27017 |
-
+| SSH | localhost:8022 |

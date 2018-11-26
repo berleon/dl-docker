@@ -73,27 +73,45 @@ run_tensorboard:
 		perl -n -e'/6006.*:([0-9]+)/ && print $$1' \
 		 > $(PORTS_CONFIG)/tensorboard_port
 
-run_mongodb:
-	mkdir -p $(PORTS_CONFIG)
+MONGODB_CONTAINER_NAME = $(NAME)_mongodb
+MONGODB_PORT=27017-28000
+SACREDBOARD_PORT=5000-6000
+
+run_mongodb_standalone:
 	GPU='' ./docker-run-wrapper.py \
-		--name $(NAME)_mongodb \
+		--name $(MONGODB_CONTAINER_NAME) \
 		-it \
 		--detach \
-		--publish 5000-6000:5000 \
-		--publish 27017-28000:27017 \
-		-e MONGO_DIR=$(MONGO_DIR) \
+		--publish $(SACREDBOARD_PORT):5000 \
+		--publish $(MONGODB_PORT):27017 \
+		-e MONGO_DIR=$(MONGODB_DIR) \
+		-e MONGODB_DIR=$(MONGODB_DIR) \
 		$(DOCKER_MOUNTS)  \
 		--memory=4g \
 		$(NAME)/mongodb
 	sleep 1
+	@ echo
+	@ echo
+	@ echo
+	@ ADDR=$$(docker inspect --format='{{.NetworkSettings.IPAddress}}' $(MONGODB_CONTAINER_NAME)); \
+		   PORT=$$(docker port $(MONGODB_CONTAINER_NAME) | perl -n -e'/27017.*:([0-9]+)/ && print $$1'); \
+		   echo MONGODB_DIR=$(MONGODB_DIR); \
+		   echo "# from inside docker"; \
+		   echo MONGODB_URI=mongodb://$$ADDR:27017 ; \
+		   echo ""; \
+		   echo "# from the outside "; \
+		   echo MONGODB_URI=mongodb://`hostname`:$$PORT
+
+run_mongodb: run_mongodb_standalone
+	sleep 1
 	echo `hostname` > $(PORTS_CONFIG)/mongodb_host
-	docker port $(NAME)_mongodb | \
+	docker port $(MONGODB_CONTAINER_NAME)_| \
 		perl -n -e'/27017.*:([0-9]+)/ && print $$1' \
 		 > $(PORTS_CONFIG)/mongodb_port
-	docker port $(NAME)_mongodb | \
+	docker port $(MONGODB_CONTAINER_NAME)| \
 		perl -n -e'/5000.*:([0-9]+)/ && print $$1' \
 		> $(PORTS_CONFIG)/sacredboard_port
-	docker inspect --format='{{.NetworkSettings.IPAddress}}' $(NAME)_mongodb \
+	docker inspect --format='{{.NetworkSettings.IPAddress}}' $(MONGODB_CONTAINER_NAME)\
 		> $(PORTS_CONFIG)/docker_mongodb_ip
 
 run_all: run_mongodb run_tensorboard run_pytorch
@@ -101,19 +119,25 @@ run_all: run_mongodb run_tensorboard run_pytorch
 rm_pytorch:
 	docker rm -f $(NAME)_pytorch
 
+rm_tensorboard:
+	docker rm -f $(NAME)_tensorboard
+
 restart_pytorch:
 	make rm_pytorch
 	make run_pytorch
 
 rm_all_containers:
 	docker rm -f $(NAME)_pytorch
-	docker rm -f $(NAME)_mongodb
+	docker rm -f $(MONGODB_CONTAINER_NAME)
 	docker rm -f $(NAME)_tensorboard
 
-zsh:
+zsh: enter_pytorch
+zsh_root: enter_pytorch_root
+
+enter_pytorch:
 	docker exec -it --user $(USER) $(NAME)_pytorch sh -c zsh
 
-zsh_root:
+enter_pytorch_root:
 	docker exec -it $(NAME)_pytorch sh -c zsh
 
 test:

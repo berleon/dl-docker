@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y --assume-yes --install-recommends \
         libavcodec-extra \
         libav-tools \
         libopencv-dev \
+        imagemagick \
         pkg-config \
         libbz2-dev \
         capnproto \

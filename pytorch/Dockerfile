@@ -99,6 +99,7 @@ RUN pip install \
         tensorboardX \
         sacred \
         dlib \
+        imgaug \
         && true
 
 

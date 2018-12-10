@@ -105,7 +105,7 @@ run_mongodb_standalone:
 run_mongodb: run_mongodb_standalone
 	sleep 1
 	echo `hostname` > $(PORTS_CONFIG)/mongodb_host
-	docker port $(MONGODB_CONTAINER_NAME)_| \
+	docker port $(MONGODB_CONTAINER_NAME) | \
 		perl -n -e'/27017.*:([0-9]+)/ && print $$1' \
 		 > $(PORTS_CONFIG)/mongodb_port
 	docker port $(MONGODB_CONTAINER_NAME)| \
@@ -142,6 +142,7 @@ enter_pytorch_root:
 
 test:
 	echo hello
+
 save:
 	[ ! -d "export" ]
 	mkdir -p export

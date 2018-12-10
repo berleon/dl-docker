@@ -85,6 +85,7 @@ RUN conda create -n py36  \
         pytest \
         pytest-arraydiff \
         pytest-flake8 \
+        joblib \
         && true
 
 RUN conda list -n py36 | grep python

@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y --assume-yes --install-recommends \
         libavcodec-extra \
         libav-tools \
         libopencv-dev \
+        locales \
         imagemagick \
         pkg-config \
         libbz2-dev \
@@ -61,6 +62,7 @@ RUN conda create -n py36  \
             -c conda-forge \
         python=3.6 \
         anaconda \
+        opencv \
         pytorch \
         cuda90 \
         numpy \
@@ -130,14 +132,13 @@ RUN chmod +x /usr/local/bin/run_jupyter.sh \
 
 RUN ldconfig    # otherwise the cuda libaries are not found
 
-RUN apt-get update && apt-get install -y --assume-yes --install-recommends locales
-
 RUN locale-gen en_US.UTF-8  # fix utf-8 encoding
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 ENV DOCKER_DL True
+ENV TERM xterm-256color
 
 RUN ln -s /opt/conda/bin/activate /usr/bin/activate
 # Use the same gid and uid as your user on the host system. You can find them

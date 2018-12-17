@@ -46,7 +46,7 @@ run_pytorch:
 		$(DOCKER_MOUNTS)  \
 		$(NAME)/pytorch
 	sleep 1
-	if [ -e $(HOME)/install_local_pip.sh ]; then \
+	- if [ -e $(HOME)/install_local_pip.sh ]; then \
 		docker exec -it $(NAME)_pytorch $(HOME)/install_local_pip.sh; \
 	fi;
 	docker port $(NAME)_pytorch | \

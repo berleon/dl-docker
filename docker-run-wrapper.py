@@ -91,7 +91,7 @@ parser.add_argument('--sshport', metavar='SSH_PORT', type=int,
 
 parser.add_argument('--jupyterport', metavar='JUPYTER_PORT', type=int,
                     default=random.randint(8000,10000),
-					help='Specify a jupyter port (default: randomly chosen in port range [600, 800])')
+					help='Specify a jupyter port (default: randomly chosen in port range [8000, 10000])')
 
 parser.add_argument('--jupyterpass', metavar='JUPYTER_PASSWORD', type=str,
                     default=''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(30)),

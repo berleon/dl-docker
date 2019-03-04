@@ -2,21 +2,13 @@ include config.mk
 
 .PHONY: print_config print_ports
 
-build_all: build_mongodb build_tensorboard build_pytorch
+build_all: build_mongodb build_pytorch
 
 build_pytorch:
 	docker build -t $(NAME)/pytorch pytorch
 
 build_mongodb:
 	docker build  -t $(NAME)/mongodb mongodb
-
-build_tensorboard:
-	docker build -t $(NAME)/tensorboard tensorboard
-
-
-print_config:
-	echo "Name: $(NAME)"
-	echo "Ports config: $(PORTS_CONFIG)"
 
 print_ports:
 	for f in $(PORTS_CONFIG)/* ; do \
@@ -27,7 +19,6 @@ print_ports:
 rm_images:
 	docker rmi $(NAME)/pytorch
 	docker rmi $(NAME)/mongodb
-	docker rmi $(NAME)/tensorboard
 
 run_pytorch:
 	mkdir -p $(PORTS_CONFIG)
@@ -43,6 +34,7 @@ run_pytorch:
 		-e MODEL_DIR=$(MODEL_DIR) \
 		-e TENSORBOARD_DIR=$(TENSORBOARD_DIR) \
 		-e DATA_DIR=$(DATA_DIR) \
+		--publish 60000-61000:6006 \
 		$(DOCKER_MOUNTS)  \
 		$(NAME)/pytorch
 	sleep 1
@@ -55,23 +47,11 @@ run_pytorch:
 	docker port $(NAME)_pytorch | \
 		perl -n -e'/22.*:([0-9]+)/ && print $$1' \
 		> $(PORTS_CONFIG)/ssh_port
-	echo `hostname` > $(PORTS_CONFIG)/ssh_host
-
-run_tensorboard:
-	mkdir -p $(PORTS_CONFIG)
-	GPU='' ./docker-run-wrapper.py \
-		--name $(NAME)_tensorboard \
-		-it \
-		-e TENSORBOARD_DIR=$(TENSORBOARD_DIR) \
-		--publish 60000-61000:6006 \
-		$(DOCKER_MOUNTS)  \
-		--detach \
-		$(NAME)/tensorboard
-	sleep 1
-	echo `hostname` > $(PORTS_CONFIG)/tensorboard_host
-	docker port $(NAME)_tensorboard | \
+	docker port $(NAME)_pytorch | \
 		perl -n -e'/6006.*:([0-9]+)/ && print $$1' \
 		 > $(PORTS_CONFIG)/tensorboard_port
+	echo `hostname` > $(PORTS_CONFIG)/ssh_host
+
 
 MONGODB_CONTAINER_NAME = $(NAME)_mongodb
 MONGODB_PORT=27017-28000
@@ -114,13 +94,10 @@ run_mongodb: run_mongodb_standalone
 	docker inspect --format='{{.NetworkSettings.IPAddress}}' $(MONGODB_CONTAINER_NAME)\
 		> $(PORTS_CONFIG)/docker_mongodb_ip
 
-run_all: run_mongodb run_tensorboard run_pytorch
+run_all: run_mongodb run_pytorch
 
 rm_pytorch:
 	docker rm -f $(NAME)_pytorch
-
-rm_tensorboard:
-	docker rm -f $(NAME)_tensorboard
 
 restart_pytorch:
 	make rm_pytorch
@@ -129,7 +106,6 @@ restart_pytorch:
 rm_all_containers:
 	docker rm -f $(NAME)_pytorch
 	docker rm -f $(MONGODB_CONTAINER_NAME)
-	docker rm -f $(NAME)_tensorboard
 
 zsh: enter_pytorch
 zsh_root: enter_pytorch_root
@@ -139,9 +115,6 @@ enter_pytorch:
 
 enter_pytorch_root:
 	docker exec -it $(NAME)_pytorch sh -c zsh
-
-test:
-	echo hello
 
 save:
 	[ ! -d "export" ]

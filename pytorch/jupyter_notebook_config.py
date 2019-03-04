@@ -19,6 +19,7 @@ from IPython.lib import passwd
 c.NotebookApp.ip = '*'
 c.NotebookApp.port = int(os.getenv('PORT', 8888))
 c.NotebookApp.open_browser = False
+c.NotebookApp.notebook_dir=os.getenv('JUPYTER_DIR', '~')
 c.MultiKernelManager.default_kernel_name = 'python3'
 
 # sets a password if PASSWORD is set in the environment

@@ -10,15 +10,14 @@ Create your own config.mk file with
 $ ./generate-config.sh > config.mk
 ```
 
-This defines the paths of jupyter, pytorch, and mongodb, which volumes to mount and which gpus to use.
-If you have to install some local pip packages you can create
-a script `$HOME/install_local_pip.sh` that will be executed
-everytime you start a new `pytorch` container. The content would then look like this:
+This defines the paths of jupyter, pytorch, mongodb and which volumes to mount.
+If you have to install some local pip packages you can create a script
+`$HOME/install_local_pip.sh` that will be executed everytime you start a new `pytorch` container.
+The content of `$HOME/install_local_pip.sh` could look like this:
 
 ```
 #! /usr/bin/env bash
 
-cd "$(dirname "$0")"
 pip install -e ./my_local_project
 ```
 
@@ -50,7 +49,7 @@ $ source /opt/conda/bin/activate py36
 
 The Makefile automatically saves all relevant ports.
 
-You can forward the ports to your machine with with the `forward_docker_ports.sh` script.  On your local machine runs:
+You can forward the ports to your machine with with the `forward_docker_ports.sh` script.  On your local machine run:
 
 ```
 $ forward_docker_ports.sh <your_hostname>

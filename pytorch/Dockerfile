@@ -89,6 +89,7 @@ RUN conda create -n py36  \
         pytest-arraydiff \
         pytest-flake8 \
         joblib \
+        nodejs \
         && true
 
 RUN conda list -n py36 | grep python
@@ -112,6 +113,11 @@ RUN pip install jupyter_contrib_nbextensions \
  && jupyter nbextension enable hinterland/hinterland \
  && jupyter nbextension enable varInspector/main \
  && jupyter nbextension enable comment-uncomment/main
+
+
+RUN jupyter labextension install \
+        @jupyter-widgets/jupyterlab-manager \
+        jupyterlab_vim
 
 RUN echo "source /opt/conda/bin/activate/py36" >> /etc/profile
 

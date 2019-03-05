@@ -2,7 +2,6 @@
 
 N_GPUS=$(nvidia-smi -L | wc -l)
 
-seq 0 $N_GPUS
 GPUS=""
 for i in `seq 0 $((N_GPUS - 1))`; do
     if [ "$i" == "0" ]; then

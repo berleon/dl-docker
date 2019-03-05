@@ -115,9 +115,9 @@ RUN pip install jupyter_contrib_nbextensions \
  && jupyter nbextension enable comment-uncomment/main
 
 
-RUN jupyter labextension install \
-        @jupyter-widgets/jupyterlab-manager \
-        jupyterlab_vim
+# RUN jupyter labextension install \
+#         @jupyter-widgets/jupyterlab-manager \
+#         jupyterlab_vim
 
 RUN echo "source /opt/conda/bin/activate/py36" >> /etc/profile
 
